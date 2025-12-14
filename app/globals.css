@@ -4,31 +4,31 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Neural Pathway Theme - Deep Space */
+  /* Medical-themed color palette with red accents */
   --background: oklch(0.08 0 0);
   --foreground: oklch(0.95 0 0);
-  --card: oklch(0.12 0.02 280);
+  --card: oklch(0.12 0.02 20);
   --card-foreground: oklch(0.95 0 0);
-  --popover: oklch(0.12 0.02 280);
+  --popover: oklch(0.12 0.02 20);
   --popover-foreground: oklch(0.95 0 0);
-  --primary: oklch(0.6 0.2 290);
-  --primary-foreground: oklch(0.12 0.02 280);
-  --secondary: oklch(0.5 0.25 250);
+  --primary: oklch(0.58 0.22 27);
+  --primary-foreground: oklch(0.12 0.02 20);
+  --secondary: oklch(0.5 0.18 15);
   --secondary-foreground: oklch(0.95 0 0);
-  --muted: oklch(0.25 0.02 280);
-  --muted-foreground: oklch(0.65 0.05 280);
-  --accent: oklch(0.65 0.22 260);
+  --muted: oklch(0.25 0.02 20);
+  --muted-foreground: oklch(0.65 0.05 20);
+  --accent: oklch(0.6 0.2 25);
   --accent-foreground: oklch(0.08 0 0);
   --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.577 0.245 27.325);
-  --border: oklch(0.2 0.02 280);
-  --input: oklch(0.15 0.02 280);
-  --ring: oklch(0.6 0.2 290);
-  --chart-1: oklch(0.6 0.2 290);
-  --chart-2: oklch(0.65 0.22 260);
-  --chart-3: oklch(0.55 0.18 200);
-  --chart-4: oklch(0.5 0.22 180);
-  --chart-5: oklch(0.58 0.19 310);
+  --destructive-foreground: oklch(0.95 0 0);
+  --border: oklch(0.2 0.02 20);
+  --input: oklch(0.15 0.02 20);
+  --ring: oklch(0.58 0.22 27);
+  --chart-1: oklch(0.58 0.22 27);
+  --chart-2: oklch(0.6 0.2 25);
+  --chart-3: oklch(0.55 0.18 30);
+  --chart-4: oklch(0.5 0.18 15);
+  --chart-5: oklch(0.58 0.19 20);
   --radius: 0.625rem;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
@@ -151,13 +151,14 @@
 }
 
 /* Custom animations for neural pathway effects */
+/* Updated glow animations for red medical theme */
 @keyframes glow-pulse {
   0%,
   100% {
-    box-shadow: 0 0 20px rgba(147, 51, 234, 0.5), inset 0 0 20px rgba(147, 51, 234, 0.1);
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.4), inset 0 0 20px rgba(239, 68, 68, 0.08);
   }
   50% {
-    box-shadow: 0 0 40px rgba(147, 51, 234, 0.8), inset 0 0 30px rgba(147, 51, 234, 0.2);
+    box-shadow: 0 0 40px rgba(239, 68, 68, 0.6), inset 0 0 30px rgba(239, 68, 68, 0.15);
   }
 }
 
@@ -222,6 +223,27 @@
   }
 }
 
+/* Added medical-themed glow animation */
+@keyframes glow-pulse-red {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.4), inset 0 0 20px rgba(239, 68, 68, 0.08);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(239, 68, 68, 0.6), inset 0 0 30px rgba(239, 68, 68, 0.15);
+  }
+}
+
+/* Faster scroll animation for carousel */
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
 .animate-glow-pulse {
   animation: glow-pulse 2s ease-in-out infinite;
 }
@@ -244,6 +266,18 @@
 
 .animate-scan-line {
   animation: scan-line 3s ease-in-out infinite;
+}
+
+.animate-glow-pulse-red {
+  animation: glow-pulse-red 2s ease-in-out infinite;
+}
+
+.animate-scroll-left {
+  animation: scroll-left 25s linear infinite;
+}
+
+.pause-animation {
+  animation-play-state: paused;
 }
 
 /* Added smooth scale animation utility */
@@ -270,11 +304,11 @@
   animation-name: fadeIn;
 }
 
-/* Glassmorphism effect */
+/* Updated glassmorphism with red accents */
 .glass {
   background: rgba(15, 23, 42, 0.6);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(147, 51, 234, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.15);
 }
 
 .glass-hover {
@@ -283,19 +317,19 @@
 
 .glass-hover:hover {
   background: rgba(15, 23, 42, 0.8);
-  border-color: rgba(147, 51, 234, 0.5);
-  box-shadow: 0 0 30px rgba(147, 51, 234, 0.3);
+  border-color: rgba(239, 68, 68, 0.4);
+  box-shadow: 0 0 30px rgba(239, 68, 68, 0.2);
 }
 
-/* Neon glow effects */
+/* Red neon glow effects */
 .neon-glow {
-  text-shadow: 0 0 10px rgba(168, 85, 247, 0.8), 0 0 20px rgba(59, 130, 246, 0.5);
+  text-shadow: 0 0 10px rgba(239, 68, 68, 0.6), 0 0 20px rgba(220, 38, 38, 0.4);
 }
 
 .neon-border {
   border: 2px solid transparent;
   background-image: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)),
-    linear-gradient(135deg, rgba(168, 85, 247, 0.8), rgba(59, 130, 246, 0.8), rgba(34, 197, 94, 0.6));
+    linear-gradient(135deg, rgba(239, 68, 68, 0.8), rgba(220, 38, 38, 0.7), rgba(185, 28, 28, 0.6));
   background-origin: border-box;
   background-clip: padding-box, border-box;
 }

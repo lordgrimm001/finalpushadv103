@@ -29,14 +29,13 @@ export default function CursorTrail() {
       const dy = mousePos.current.y - lastMouse.current.y
       const distance = Math.sqrt(dx * dx + dy * dy)
 
-      if (distance > 8) {
-        // Create medical-themed particles (hearts and plus signs)
+      if (distance > 5) {
         const particleType = Math.random() > 0.5 ? "heart" : "plus"
         particles.current.push({
-          x: mousePos.current.x + (Math.random() - 0.5) * 15,
-          y: mousePos.current.y + (Math.random() - 0.5) * 15,
-          vx: (Math.random() - 0.5) * 1.5,
-          vy: (Math.random() - 0.5) * 1.5 - 1, // Float upward
+          x: mousePos.current.x + (Math.random() - 0.5) * 20,
+          y: mousePos.current.y + (Math.random() - 0.5) * 20,
+          vx: (Math.random() - 0.5) * 2,
+          vy: (Math.random() - 0.5) * 2 - 1.5,
           life: 1,
           type: particleType,
         })
@@ -53,30 +52,27 @@ export default function CursorTrail() {
       particles.current = particles.current.filter((particle) => {
         particle.x += particle.vx
         particle.y += particle.vy
-        particle.vy -= 0.02 // Gentle float upward
-        particle.life -= 0.015
+        particle.vy -= 0.03
+        particle.life -= 0.012
 
         if (particle.life <= 0) return false
 
-        const alpha = particle.life * 0.6
-        const size = 12 * particle.life
+        const alpha = particle.life * 0.5
+        const size = 18 * particle.life
 
-        // Draw soft glow
-        const gradient = ctx.createRadialGradient(particle.x, particle.y, 0, particle.x, particle.y, size * 1.5)
-        gradient.addColorStop(0, `rgba(239, 68, 68, ${alpha * 0.3})`) // Soft red
+        const gradient = ctx.createRadialGradient(particle.x, particle.y, 0, particle.x, particle.y, size * 2)
+        gradient.addColorStop(0, `rgba(239, 68, 68, ${alpha * 0.3})`)
         gradient.addColorStop(0.5, `rgba(239, 68, 68, ${alpha * 0.15})`)
         gradient.addColorStop(1, `rgba(239, 68, 68, 0)`)
         ctx.fillStyle = gradient
         ctx.beginPath()
-        ctx.arc(particle.x, particle.y, size * 1.5, 0, Math.PI * 2)
+        ctx.arc(particle.x, particle.y, size * 2, 0, Math.PI * 2)
         ctx.fill()
 
-        // Draw particle shape
-        ctx.fillStyle = `rgba(239, 68, 68, ${alpha})`
+        ctx.fillStyle = `rgba(239, 68, 68, ${alpha * 0.8})`
 
         if (particle.type === "heart") {
-          // Draw heart shape
-          const heartSize = size * 0.5
+          const heartSize = size * 0.7
           ctx.beginPath()
           ctx.moveTo(particle.x, particle.y + heartSize * 0.3)
           ctx.bezierCurveTo(
@@ -97,18 +93,16 @@ export default function CursorTrail() {
           )
           ctx.fill()
         } else {
-          // Draw plus sign
-          const plusSize = size * 0.6
-          ctx.fillRect(particle.x - plusSize / 6, particle.y - plusSize / 2, plusSize / 3, plusSize)
-          ctx.fillRect(particle.x - plusSize / 2, particle.y - plusSize / 6, plusSize, plusSize / 3)
+          const plusSize = size * 0.8
+          ctx.fillRect(particle.x - plusSize / 5, particle.y - plusSize / 2, plusSize / 2.5, plusSize)
+          ctx.fillRect(particle.x - plusSize / 2, particle.y - plusSize / 5, plusSize, plusSize / 2.5)
         }
 
         return true
       })
 
-      // Limit particle count for performance
-      if (particles.current.length > 40) {
-        particles.current = particles.current.slice(-40)
+      if (particles.current.length > 60) {
+        particles.current = particles.current.slice(-60)
       }
 
       requestAnimationFrame(animate)

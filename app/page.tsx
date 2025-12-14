@@ -39,29 +39,29 @@ export default function Home() {
         <div id="home" className="min-h-screen flex items-center justify-center">
           <HeroSection />
         </div>
-        <div id="about" className="min-h-screen flex items-center justify-center py-20">
+        <div id="about" className="min-h-screen flex items-center justify-center py-12">
           <AboutSection />
         </div>
         <div
           id="journey"
-          className="min-h-screen flex items-center justify-center py-20 bg-gradient-to-b from-background to-slate-900/20"
+          className="min-h-screen flex items-center justify-center py-12 bg-gradient-to-b from-background to-slate-900/20"
         >
           <div className="max-w-4xl mx-auto px-4 w-full">
             <EducationalTripSection />
           </div>
         </div>
-        <div id="gallery" className="min-h-screen flex items-center justify-center py-20">
+        <div id="gallery" className="min-h-screen flex items-center justify-center py-12">
           <div className="max-w-4xl mx-auto px-4 w-full">
             <GallerySection />
           </div>
         </div>
         <div
           id="skills"
-          className="min-h-screen flex items-center justify-center py-20 bg-gradient-to-b from-slate-900/20 to-background"
+          className="min-h-screen flex items-center justify-center py-12 bg-gradient-to-b from-slate-900/20 to-background"
         >
           <SkillsSection />
         </div>
-        <div id="vision" className="min-h-screen flex items-center justify-center py-20">
+        <div id="vision" className="min-h-screen flex items-center justify-center py-12">
           <DreamSection />
         </div>
         <FooterSection />
