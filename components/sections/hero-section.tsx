@@ -10,9 +10,9 @@ export default function HeroSection() {
   const [isTypingName, setIsTypingName] = useState(true)
   const nameRef = useRef("Francis Xavier C. Baclao")
 
-  // Subtitle phrases
+  // Updated subtitle phrases
   const subtitles = [
-    "3rd Year BSIT Student",
+    "Where Innovation Meets Compassion, We Build a Safer Tomorrow",
     "Using Technology to Make a Difference",
     "Serving with Heart"
   ]
@@ -66,6 +66,16 @@ export default function HeroSection() {
     if (section) section.scrollIntoView({ behavior: "smooth" })
   }
 
+  // Highlight only important words in subtitle
+  const highlightWords = (text: string) => {
+    return text.split(" ").map((word, index) => {
+      let colorClass = "text-white"
+      if (word.includes("Innovation") || word.includes("Technology")) colorClass = "text-red-400 font-bold"
+      if (word.includes("Compassion") || word.includes("Safer") || word.includes("Tomorrow") || word.includes("Humanity")) colorClass = "text-green-400 font-bold"
+      return <span key={index} className={colorClass}>{word} </span>
+    })
+  }
+
   return (
     <section className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-gradient-to-b from-background via-background to-slate-900/20 px-4 pt-20 pb-6">
       <div className="relative z-10 max-w-4xl mx-auto text-center">
@@ -99,12 +109,14 @@ export default function HeroSection() {
 
         {/* Animated Subtitle */}
         <JourneyWrapper delay={400}>
-          <p className="text-xl md:text-2xl font-semibold text-gray-200 mb-4 max-w-3xl mx-auto leading-relaxed">
-            <span className="text-red-400">{displaySubtitle}</span>
+          <p className="text-xl md:text-2xl font-semibold mb-4 max-w-3xl mx-auto leading-relaxed">
+            {highlightWords(displaySubtitle)}
           </p>
+
+          {/* Mission Statement */}
           <p className="text-base md:text-lg text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            On a mission to bridge <span className="text-red-400">technology</span> and{" "}
-            <span className="text-gray-50">humanity</span> through innovation, service, and purpose-driven development.
+            On a mission to bridge <span className="text-red-400 font-bold">TECHNOLOGY</span> and{" "}
+            <span className="text-green-400 font-bold">HUMANITY</span> through a purpose-driven development.
           </p>
         </JourneyWrapper>
 
