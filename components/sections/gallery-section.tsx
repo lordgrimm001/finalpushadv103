@@ -1,212 +1,200 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { X, ChevronLeft, ChevronRight, ArrowLeft } from "lucide-react"
 
+type GalleryItem = {
+  id: number
+  category: string
+  title: string
+  images: string[]
+  description: string
+}
+
 export default function GallerySection() {
-  const [selectedCategory, setSelectedCategory] = useState("all")
-  const [selectedImage, setSelectedImage] = useState<number | null>(null)
+  const [selectedCategory, setSelectedCategory] = useState("All")
+  const [activeAlbum, setActiveAlbum] = useState<GalleryItem | null>(null)
+  const [activeIndex, setActiveIndex] = useState(0)
 
-  const categories = ["all", "Educational Trip", "Volunteer Work", "Certificates"]
+  const categories = [
+    "All",
+    "Educational Trip",
+    "Volunteer Work",
+    "Journal & Certificates",
+  ]
 
-  const galleryItems = [
+  const galleryItems: GalleryItem[] = [
+    // ─── Educational Trips ───
     {
       id: 1,
       category: "Educational Trip",
-      title: "PLDT Visit",
-      image: "/pldt-data-center-server-room-infrastructure-techno.jpg",
-      description: "Exploring data center infrastructure",
+      title: "PLDT Vitro Davao",
+      images: ["/pldt 1.jpg", "/pldt 2.jpg", "/pldt 3.jpg"],
+      description: "Exploring modern data center infrastructure",
     },
     {
       id: 2,
       category: "Educational Trip",
-      title: "Jairosoft",
-      image: "/software-development-office-tech-startup-environme.jpg",
-      description: "Learning from software developers",
+      title: "Jairosoft Corporation",
+      images: ["/jai 1.jpg", "/jai 2.jpg", "/jai 3.jpg"],
+      description: "Learning from real-world software teams",
     },
     {
       id: 3,
       category: "Educational Trip",
-      title: "Central 911",
-      image: "/emergency-response-center-technology.jpg",
-      description: "Emergency response technology",
+      title: "Central 911 Davao",
+      images: ["/cent 1.jpg", "/cent 2.jpg", "/cent 3.jpg"],
+      description: "Technology behind emergency response systems",
     },
+
+    // ─── Volunteer Work ───
     {
       id: 4,
       category: "Volunteer Work",
-      title: "Medical Support",
-      image: "/professional-it-student-volunteer-portrait-headsho.jpg",
-      description: "Supporting healthcare initiatives",
+      title: "Volunteer Experience",
+      images: Array.from({ length: 19 }, (_, i) => `/s1 (${i + 1}).jpg`),
+      description: "Community and healthcare support activities",
     },
+
+    // ─── Journal & Certificates (KEEP ONLY THIS ONE) ───
     {
-      id: 5,
-      category: "Volunteer Work",
-      title: "Community Care",
-      image: "/medical-volunteer-community-health.jpg",
-      description: "Community health programs",
-    },
-    {
-      id: 6,
-      category: "Volunteer Work",
-      title: "Health Campaign",
-      image: "/volunteer-health-awareness-campaign.jpg",
-      description: "Health awareness initiatives",
-    },
-    {
-      id: 7,
-      category: "Certificates",
-      title: "Achievement 1",
-      image: "/certificate-of-recognition-volunteer.jpg",
-      description: "Recognition certificate",
-    },
-    {
-      id: 8,
-      category: "Certificates",
-      title: "Achievement 2",
-      image: "/medical-volunteer-training-certificate.jpg",
-      description: "Training completion",
+      id: 100,
+      category: "Journal & Certificates",
+      title: "Journal & Certificates",
+      images: [
+        "/journal 1.jpg",
+        "/journal 2.jpg",
+        "/journal 3.jpg",
+        "/journal 4.jpg",
+        "/cert.jpg",
+      ],
+      description: "Scanned journal pages and official certificates",
     },
   ]
 
   const filteredItems =
-    selectedCategory === "all" ? galleryItems : galleryItems.filter((item) => item.category === selectedCategory)
+    selectedCategory === "All"
+      ? galleryItems
+      : galleryItems.filter((item) => item.category === selectedCategory)
 
-  const openImage = (id: number) => setSelectedImage(id)
-  const closeImage = () => setSelectedImage(null)
-  const currentImageIndex = filteredItems.findIndex((item) => item.id === selectedImage)
-  const currentItem = filteredItems[currentImageIndex]
-
-  const goToPrevious = () => {
-    if (currentImageIndex > 0) {
-      setSelectedImage(filteredItems[currentImageIndex - 1].id)
-    }
+  const openAlbum = (item: GalleryItem) => {
+    setActiveAlbum(item)
+    setActiveIndex(0)
   }
 
-  const goToNext = () => {
-    if (currentImageIndex < filteredItems.length - 1) {
-      setSelectedImage(filteredItems[currentImageIndex + 1].id)
-    }
-  }
+  const closeAlbum = () => setActiveAlbum(null)
+
+  const prevImage = () => setActiveIndex((i) => Math.max(i - 1, 0))
+  const nextImage = () =>
+    setActiveIndex((i) =>
+      activeAlbum ? Math.min(i + 1, activeAlbum.images.length - 1) : i
+    )
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Escape") closeImage()
-    if (e.key === "ArrowLeft") goToPrevious()
-    if (e.key === "ArrowRight") goToNext()
+    if (e.key === "Escape") closeAlbum()
+    if (e.key === "ArrowLeft") prevImage()
+    if (e.key === "ArrowRight") nextImage()
   }
 
   return (
-    <div className="relative w-full">
-      <h2 className="text-3xl md:text-4xl font-bold mb-3 neon-glow">My Gallery</h2>
-      <p className="text-gray-400 mb-6 leading-relaxed text-sm md:text-base">Moments that shaped my journey</p>
+    <section className="relative w-full mt-24 px-4">
+      <h2 className="text-3xl md:text-4xl font-bold neon-glow mb-2 text-center">
+        My Gallery
+      </h2>
+      <p className="text-gray-400 mb-10 text-sm md:text-base max-w-xl mx-auto text-center">
+        A curated collection of experiences
+      </p>
 
-      <div className="flex flex-wrap gap-3 mb-6">
+      {/* FILTERS */}
+      <div className="flex flex-wrap justify-center gap-3 mb-10">
         {categories.map((category) => (
           <button
             key={category}
             onClick={() => setSelectedCategory(category)}
-            className={`px-5 py-2.5 rounded-full font-semibold transition-all duration-300 text-sm cursor-fancy ${
+            className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 border-2 ${
               selectedCategory === category
-                ? "glass bg-red-600/30 border-2 border-red-400 scale-105 shadow-[0_0_20px_rgba(239,68,68,0.4)]"
-                : "glass hover:border-red-400 hover:scale-105 hover:shadow-[0_0_15px_rgba(239,68,68,0.3)] active:scale-95 border border-white/10"
+                ? "border-red-500 text-white bg-red-600/20 shadow-lg shadow-red-400/40"
+                : "border-gray-500 text-white hover:border-red-500 hover:scale-105 hover:shadow-lg hover:shadow-red-400/20"
             }`}
           >
-            {category.charAt(0).toUpperCase() + category.slice(1)}
+            {category}
           </button>
         ))}
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+      {/* GRID */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {filteredItems.map((item) => (
           <button
             key={item.id}
-            onClick={() => openImage(item.id)}
-            className="group cursor-fancy relative h-40 md:h-48 rounded-xl overflow-hidden glass glass-hover border border-red-500/30 hover:border-red-400 transition-all duration-500 hover:scale-[1.03] hover:shadow-[0_0_25px_rgba(239,68,68,0.4)] active:scale-95 text-left"
+            onClick={() => openAlbum(item)}
+            className="relative h-56 rounded-2xl overflow-hidden glass border border-red-500/30 transition-all duration-500 hover:border-red-400 hover:shadow-[0_0_25px_rgba(239,68,68,0.35)]"
           >
             <img
-              src={item.image || "/placeholder.svg"}
+              src={item.images[0]}
               alt={item.title}
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+              className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-end p-3">
-              <h3 className="text-sm font-bold text-white text-center w-full transform group-hover:translate-y-0 translate-y-2 transition-transform duration-300">
-                {item.title}
-              </h3>
-              <p className="text-xs text-red-300 text-center w-full transform group-hover:translate-y-0 translate-y-2 transition-transform duration-300 delay-75">
-                {item.category}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-4 flex flex-col justify-end">
+              <h3 className="text-white font-bold text-sm">{item.title}</h3>
+              <p className="text-red-300 text-xs">
+                {item.images.length} photo(s)
               </p>
-            </div>
-            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
             </div>
           </button>
         ))}
       </div>
 
-      {filteredItems.length === 0 && (
-        <div className="text-center py-12">
-          <p className="text-gray-400 text-base">No items in this category yet.</p>
-        </div>
-      )}
-
-      {selectedImage !== null && currentItem && (
+      {/* MODAL */}
+      {activeAlbum && (
         <div
-          className="fixed inset-0 bg-black/95 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-in fade-in duration-300"
-          onKeyDown={handleKeyDown}
+          className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4"
           tabIndex={0}
+          onKeyDown={handleKeyDown}
         >
-          <div className="relative max-w-5xl w-full animate-in zoom-in-95 duration-300">
+          <div className="relative max-w-4xl w-full">
             <button
-              onClick={closeImage}
-              className="absolute -top-14 left-0 text-white hover:text-red-400 transition-all duration-300 flex items-center gap-2 group"
+              onClick={closeAlbum}
+              className="absolute -top-12 left-0 flex items-center gap-2 text-white hover:text-red-400"
             >
-              <ArrowLeft className="w-6 h-6 group-hover:-translate-x-1 transition-transform duration-300" />
-              <span className="text-base font-medium">Back to Gallery</span>
+              <ArrowLeft className="w-6 h-6" /> Back to Gallery
             </button>
 
             <button
-              onClick={closeImage}
-              className="absolute -top-14 right-0 text-white hover:text-red-400 transition-all duration-300 hover:rotate-90"
+              onClick={closeAlbum}
+              className="absolute -top-12 right-0 text-white hover:text-red-400"
             >
               <X className="w-8 h-8" />
             </button>
 
-            <div className="relative rounded-xl overflow-hidden border-2 border-red-500/40 shadow-2xl shadow-red-500/30">
+            <div className="rounded-2xl overflow-hidden border-4 border-red-500/40 bg-black shadow-2xl shadow-red-500/30">
               <img
-                src={currentItem.image || "/placeholder.svg"}
-                alt={currentItem.title}
-                className="w-full h-auto max-h-[75vh] object-contain bg-black"
+                src={activeAlbum.images[activeIndex]}
+                alt={activeAlbum.title}
+                className="w-full max-h-[60vh] object-contain"
               />
             </div>
 
             <button
-              onClick={goToPrevious}
-              disabled={currentImageIndex === 0}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-white hover:text-red-400 disabled:opacity-20 disabled:cursor-not-allowed transition-all duration-300 hover:scale-110 active:scale-95 bg-black/70 rounded-full p-3 backdrop-blur-sm border border-red-500/30"
+              onClick={prevImage}
+              disabled={activeIndex === 0}
+              className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/70 p-3 rounded-full border border-red-500/30 text-white disabled:opacity-30"
             >
               <ChevronLeft className="w-10 h-10" />
             </button>
 
             <button
-              onClick={goToNext}
-              disabled={currentImageIndex === filteredItems.length - 1}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:text-red-400 disabled:opacity-20 disabled:cursor-not-allowed transition-all duration-300 hover:scale-110 active:scale-95 bg-black/70 rounded-full p-3 backdrop-blur-sm border border-red-500/30"
+              onClick={nextImage}
+              disabled={activeIndex === activeAlbum.images.length - 1}
+              className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/70 p-3 rounded-full border border-red-500/30 text-white disabled:opacity-30"
             >
               <ChevronRight className="w-10 h-10" />
             </button>
-
-            <div className="mt-6 text-center">
-              <h3 className="text-white text-xl font-bold mb-2">{currentItem.title}</h3>
-              <p className="text-gray-400 text-sm mb-4">{currentItem.description}</p>
-              <p className="text-white text-sm font-medium bg-black/60 backdrop-blur-sm rounded-full px-6 py-2 inline-block border border-red-500/30">
-                {currentImageIndex + 1} of {filteredItems.length}
-              </p>
-              <p className="text-gray-400 text-sm mt-3">Use arrow keys or buttons to navigate • ESC to close</p>
-            </div>
           </div>
         </div>
       )}
-    </div>
+    </section>
   )
 }
+  

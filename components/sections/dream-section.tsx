@@ -47,9 +47,9 @@ export default function DreamSection() {
 
         <JourneyWrapper delay={200}>
           <h2 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-            <span className="neon-glow block mb-2">Building the Future</span>
+            <span className="neon-glow block mb-2">Where Innovation Meets Compassion,</span>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400">
-              One Node at a Time
+              We Build a Safer Tomorrow
             </span>
           </h2>
         </JourneyWrapper>

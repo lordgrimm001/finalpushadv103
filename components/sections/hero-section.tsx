@@ -1,129 +1,181 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { ArrowRight, Brain, Github, Linkedin, Mail } from "lucide-react"
+import { ArrowRight, Github, Linkedin } from "lucide-react"
 import { JourneyWrapper } from "@/components/journey-wrapper"
+import { FaFacebookF, FaInstagram } from "react-icons/fa"
 
 export default function HeroSection() {
-  const [displayText, setDisplayText] = useState("")
-  const [isTyping, setIsTyping] = useState(true)
-  const textRef = useRef("Francis Xavier C. Baclao")
-  const [scrollY, setScrollY] = useState(0)
+  const [displayName, setDisplayName] = useState("")
+  const [isTypingName, setIsTypingName] = useState(true)
+  const nameRef = useRef("Francis Xavier C. Baclao")
 
+  // Subtitle phrases
+  const subtitles = [
+    "3rd Year BSIT Student",
+    "Using Technology to Make a Difference",
+    "Serving with Heart"
+  ]
+  const [currentSubtitleIndex, setCurrentSubtitleIndex] = useState(0)
+  const [displaySubtitle, setDisplaySubtitle] = useState("")
+  const [isTypingSubtitle, setIsTypingSubtitle] = useState(true)
+
+  // Type effect for name
   useEffect(() => {
-    if (!isTyping || displayText.length >= textRef.current.length) {
-      setIsTyping(false)
+    if (!isTypingName || displayName.length >= nameRef.current.length) {
+      setIsTypingName(false)
       return
     }
 
     const timeout = setTimeout(() => {
-      setDisplayText((prev) => prev + textRef.current[prev.length])
+      setDisplayName(prev => prev + nameRef.current[prev.length])
     }, 80)
 
     return () => clearTimeout(timeout)
-  }, [displayText, isTyping])
+  }, [displayName, isTypingName])
 
+  // Type effect for subtitle rotation
   useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY)
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+    let typingTimeout: NodeJS.Timeout
+    let holdTimeout: NodeJS.Timeout
+    const currentText = subtitles[currentSubtitleIndex]
+
+    if (isTypingSubtitle) {
+      if (displaySubtitle.length < currentText.length) {
+        typingTimeout = setTimeout(() => {
+          setDisplaySubtitle(prev => prev + currentText[prev.length])
+        }, 60)
+      } else {
+        setIsTypingSubtitle(false)
+        holdTimeout = setTimeout(() => {
+          setDisplaySubtitle("")
+          setCurrentSubtitleIndex((prev) => (prev + 1) % subtitles.length)
+          setIsTypingSubtitle(true)
+        }, 1500)
+      }
+    }
+
+    return () => {
+      clearTimeout(typingTimeout)
+      clearTimeout(holdTimeout)
+    }
+  }, [displaySubtitle, isTypingSubtitle, currentSubtitleIndex])
+
+  const scrollToSection = (id: string) => {
+    const section = document.getElementById(id)
+    if (section) section.scrollIntoView({ behavior: "smooth" })
+  }
 
   return (
-    <section className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-gradient-to-b from-background via-background to-slate-900/20 px-4 pt-20">
-      {/* Animated background glow with parallax */}
-      <div className="absolute inset-0 z-0">
-        <div
-          className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl animate-float"
-          style={{ transform: `translateY(${scrollY * 0.5}px)` }}
-        ></div>
-        <div
-          className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl animate-float-slow"
-          style={{ transform: `translateY(${scrollY * 0.3}px)` }}
-        ></div>
-      </div>
-
+    <section className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-gradient-to-b from-background via-background to-slate-900/20 px-4 pt-20 pb-6">
       <div className="relative z-10 max-w-4xl mx-auto text-center">
-        {/* Holographic circle with icon */}
+
+        {/* Profile Image with spinning glow */}
         <JourneyWrapper delay={0}>
           <div className="mb-12 flex justify-center">
             <div className="relative w-32 h-32 animate-glow-pulse">
               <div
-                className="absolute inset-0 rounded-full border-2 border-purple-500/50 border-t-purple-400 border-r-blue-400 border-b-cyan-400 animate-spin"
+                className="absolute inset-0 rounded-full border-2 border-gray-500/50 border-t-gray-400 border-r-gray-400 border-b-gray-400 animate-spin"
                 style={{ animationDuration: "4s" }}
-              ></div>
-              <div className="absolute inset-2 rounded-full border border-purple-500/30 flex items-center justify-center">
-                <Brain className="w-12 h-12 text-purple-400" />
+              />
+              <div className="absolute inset-2 rounded-full border border-gray-500/30 flex items-center justify-center">
+                <img
+                  src="/Profile.jpg"
+                  alt="Profile Image"
+                  className="w-28 h-28 rounded-full object-cover"
+                />
               </div>
             </div>
           </div>
         </JourneyWrapper>
 
-        {/* Typing animation text with fade-in */}
+        {/* Name */}
         <JourneyWrapper delay={200}>
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 neon-glow">
-            {displayText}
-            {isTyping && <span className="animate-pulse">|</span>}
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 text-gray-50">
+            {displayName}
+            {isTypingName && <span className="animate-pulse text-red-400">|</span>}
           </h1>
         </JourneyWrapper>
 
-        {/* Subtitle */}
+        {/* Animated Subtitle */}
         <JourneyWrapper delay={400}>
-          <p className="text-lg md:text-2xl text-gray-300 mb-4 max-w-2xl mx-auto">
-            3rd Year BSIT Student | Technologist | Volunteer
+          <p className="text-xl md:text-2xl font-semibold text-gray-200 mb-4 max-w-3xl mx-auto leading-relaxed">
+            <span className="text-red-400">{displaySubtitle}</span>
           </p>
-          <p className="text-sm md:text-base text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed">
-            On a mission to bridge technology and humanity through innovation, service, and purpose-driven development.
+          <p className="text-base md:text-lg text-gray-300 max-w-3xl mx-auto leading-relaxed">
+            On a mission to bridge <span className="text-red-400">technology</span> and{" "}
+            <span className="text-gray-50">humanity</span> through innovation, service, and purpose-driven development.
           </p>
         </JourneyWrapper>
 
-        {/* Node-styled action buttons */}
+        {/* Buttons */}
         <JourneyWrapper delay={600}>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-            <button className="glass glass-hover px-8 py-3 rounded-full font-semibold flex items-center justify-center gap-2 text-white hover:scale-105 transition-transform">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center my-8">
+            <button
+              onClick={() => scrollToSection("about")}
+              className="glass glass-hover px-8 py-3 rounded-full font-semibold flex items-center gap-2 hover:scale-105 transition-transform text-gray-50 bg-gradient-to-r from-gray-700 via-gray-600 to-gray-700 hover:from-gray-600 hover:to-gray-500"
+            >
               Explore My Journey
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-4 h-4 text-gray-50" />
             </button>
-            <button className="border-2 border-purple-500/50 hover:border-purple-400 px-8 py-3 rounded-full font-semibold text-white transition-all duration-300 hover:scale-105">
+            <a
+              href="/resume.jpg"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="border-2 border-red-400 px-8 py-3 rounded-full font-semibold transition-all hover:scale-105 inline-flex items-center justify-center text-gray-50 hover:bg-red-500 hover:text-white"
+            >
               View Resume
-            </button>
+            </a>
           </div>
         </JourneyWrapper>
 
+        {/* Social Icons */}
         <JourneyWrapper delay={700}>
-          <div className="flex gap-4 justify-center mb-12">
+          <div className="flex gap-4 justify-center mb-6">
             <a
-              href="#"
-              className="w-12 h-12 rounded-full glass glass-hover flex items-center justify-center hover:scale-110 transition-transform"
-              aria-label="GitHub"
+              href="https://github.com/LordGrimm001"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-12 h-12 rounded-full glass glass-hover flex items-center justify-center hover:scale-110 transition text-gray-50"
             >
-              <Github className="w-5 h-5 text-gray-300" />
+              <Github className="w-5 h-5 text-gray-50" />
             </a>
             <a
-              href="#"
-              className="w-12 h-12 rounded-full glass glass-hover flex items-center justify-center hover:scale-110 transition-transform"
-              aria-label="LinkedIn"
+              href="https://www.linkedin.com/in/francis-xavier-baclao-0740bb2a6/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-12 h-12 rounded-full glass glass-hover flex items-center justify-center hover:scale-110 transition text-gray-50"
             >
-              <Linkedin className="w-5 h-5 text-gray-300" />
+              <Linkedin className="w-5 h-5 text-gray-50" />
             </a>
             <a
-              href="#"
-              className="w-12 h-12 rounded-full glass glass-hover flex items-center justify-center hover:scale-110 transition-transform"
-              aria-label="Email"
+              href="https://www.facebook.com/francisxavier.baclao"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-12 h-12 rounded-full glass glass-hover flex items-center justify-center hover:scale-110 transition text-gray-50"
             >
-              <Mail className="w-5 h-5 text-gray-300" />
+              <FaFacebookF className="w-5 h-5 text-gray-50" />
+            </a>
+            <a
+              href="https://www.instagram.com/francis.lifeline_jrny/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-12 h-12 rounded-full glass glass-hover flex items-center justify-center hover:scale-110 transition text-gray-50"
+            >
+              <FaInstagram className="w-5 h-5 text-gray-50" />
             </a>
           </div>
         </JourneyWrapper>
 
-        {/* Scroll indicator */}
+        {/* Scroll Indicator */}
         <JourneyWrapper delay={800}>
-          <div className="flex justify-center mt-12 animate-bounce">
-            <div className="w-6 h-10 border-2 border-purple-400 rounded-full flex items-center justify-center">
-              <div className="w-1 h-2 bg-purple-400 rounded-full animate-pulse"></div>
+          <div className="flex justify-center animate-bounce">
+            <div className="w-6 h-10 border-2 border-red-400 rounded-full flex items-center justify-center">
+              <div className="w-1 h-2 bg-red-400 rounded-full animate-pulse" />
             </div>
           </div>
         </JourneyWrapper>
+
       </div>
     </section>
   )
