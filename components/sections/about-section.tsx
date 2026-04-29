@@ -71,7 +71,7 @@ export default function AboutSection() {
                   I’m Francis, a 3rd-year BSIT student. I believe technology can save lives and make the world better for humanity.
                 </p>
                 <p className="text-gray-200 text-lg mb-3">
-                I want to use what I know to help others and create a safer, brighter future.</p>
+               I want to utilise my knowledge to help others and create a safer and a brighter future.</p>
                 <p className="text-gray-200 text-lg">
                  Every project and experience teaches me that real impact grows from purpose and care.
                 </p>
